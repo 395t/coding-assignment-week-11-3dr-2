@@ -37,3 +37,86 @@ Here I have included the results from the paper as I was unable to get the code 
 ### Analysis
 
 In terms of analysis, I can truly only comment on the quality of the provide code and ease of implementation rather than performance, training speed, difference between experiments, etc. The authors presented very easy to follow instructions on how to train and set up the data for various parts of the training and inference pipeline. The difficult part of the KITTI dataset was that I had to download and organize multiple folders of data as there was input data of different mediums. 
+
+
+
+
+
+
+
+
+## Center-based 3D Object Detection and Tracking
+
+### Model and Dataset
+
+**Dataset:** The nuScenes dataset is a public large-scale dataset for autonomous driving developed by the team at [Motional](https://www.motional.com/) (formerly nuTonomy). The dataset covers 1000 driving scenes in Boston and Singapore, two cities that are known for their dense traffic and highly challenging driving situations. Specifically, the dataset is splitted by 700, 150, 150 sequences for training, validation, and testing, respectively. Each sequence is approximately 20-second long, with a Lidar frequency of 20 FPS.
+
+
+
+**Model**: CenterPoints - a 3D detector that represent, detect, and track 3D objects while view them as points
+
+
+
+### Code
+
+The method is supported in the code base **[mmdetection3d](https://github.com/open-mmlab/mmdetection3d)**. The install instruction can be found in [getting_started.md](https://github.com/open-mmlab/mmdetection3d/blob/master/docs/getting_started.md).
+
+After setup the environment and dataset, we test the model via the following command:
+
+`python tools/test.py configs/centerpoint/centerpoint_0075voxel_second_secfpn_circlenms_4x8_cyclic_20e_nus.py checkpoints/centerpoint_0075voxel_second_secfpn_circlenms_4x8_cyclic_20e_nus_20200925_230905-358fbe3b.pth`
+
+
+
+For the visualization, we use the following command:
+
+`python tools/test.py configs/centerpoint/centerpoint_0075voxel_second_secfpn_circlenms_4x8_cyclic_20e_nus.py     checkpoints/centerpoint_0075voxel_second_secfpn_circlenms_4x8_cyclic_20e_nus_20200925_230905-358fbe3b.pth     --eval mAP --eval-options 'show=True' 'out_dir=./data/nuscenes/show_results'`
+
+
+
+### Results
+
+| Metric                                | Score  |
+| ------------------------------------- | ------ |
+| mean Average Precision (mAP)          | 0.5628 |
+| mean Average Translation Error (mATE) | 0.2518 |
+| mean Average Scale Error (mASE)       | 0.2497 |
+| mean Average Orientation Error (mAOE) | 0.3874 |
+| mean Average Velocity Error (mAVE)    | 0.3946 |
+| mean Average Attribute Error (mAAE)   | 0.1149 |
+| nuScenes detection score (NDS)        | 0.6416 |
+
+According to the table, the results evaluated on nuScenes 56.3 and 64.2 in mAP and NDS, respectively. On the other hand, In the official code repository, the results evaluated on nuScenes are 58.0 and 65.5 in mAP and NDS, respectively. By comparing the two results, we concluded that the performance reported in the paper is reproducible by both official repository and third-party library like mmdetection3D.
+
+
+
+| Object Class         | AP    |
+| -------------------- | ----- |
+| car                  | 0.866 |
+| truck                | 0.498 |
+| bus                  | 0.697 |
+| trailer              | 0.212 |
+| construction_vehicle | 0.324 |
+| pedestrian           | 0.880 |
+| motorcycle           | 0.434 |
+| bicycle              | 0.483 |
+| traffic_cone         | 0.827 |
+| barrier              | 0.407 |
+
+According to the per-class results, the best three categories are *car*, *pedestrian*, and *traffic_cone*. We conclud that this is result from the fact that these objects have small variance in the size and shape. Moreover, they are also few of the most common objects in the dataset. On the other hand, the class *trailer* performs the worst. We believe this is because of the complex shape nature of the object class. Note that we only use a subset of the original dataset, thus the class number might be imbalance.
+
+
+
+![5](5.png)
+
+
+
+In the paper, they pointed out center-based detectors perform much better than the anchor-based baseline when the box is rotated or deviates from the average box size due to the better ability to capture the rotation and size invariance when detecting objects. As we can see in the visualization, the method is very robust regarding to the object size and rotations, which aligns with their conclusions.
+
+
+
+### Difficulties
+
+In this project, we are facing the following difficulties during implementation:
+
+- Dataset size: most of the 3D object detection datasets is relatively large and we cannot apply whole set of them during testing due to the drive space. Accordingly, we only use the train/eval set in the first data split of nuScenes due to the hardware limitation. Thus, the results might be different from what they reported in the paper.
+- Dependencies issue: we tried running the official code release here yet failed to solve the dependencies issue. The main reason is that we did not have enough clearance to change/update CUDA version in order to compile the library like `spconv` or other CUDA extensions.
