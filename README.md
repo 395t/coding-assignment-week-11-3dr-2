@@ -95,6 +95,17 @@ python eval_rcnn.py --cfg_file cfgs/default.yaml --ckpt PointRCNN.pth --batch_si
 
 ### Results
 
+We measure the average precision of object detection on the car category of the KITTI dataset. We measure the avverage precision of achieving a minimum IOU of 0.7 on easy, medium, and hard difficulty samples.
+We measure bbox (the 2D accuracy of the detection frame), bev (the accuracy of the detection box in view), 3d (the accuracy of the detection frame), and aos (the accuracy of the detection target rotation angle).
+
+|      | Easy | Medium | Hard  |
+|------|------|--------|-------|
+| bbox | 96.9 | 89.5   | 88.7  |
+| bev  | 90.2 | 87.9   | 85.5  |
+| 3d   | 89.2 | 78.9   | 77.9  |
+| aos  | 96.9 | 89.4   | 88.6  |
+
+
 ## Reference
 
 For the coding related to the Pseudo-LiDAR paper, I referenced code from the author's Github repo: https://github.com/mileyan/pseudo_lidar
