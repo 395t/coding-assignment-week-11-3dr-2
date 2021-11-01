@@ -1,16 +1,5 @@
-# coding-template
+# Coding Assignment Week 11 Group 2
 
-## Summary
-
-The summary can contain but is not limited to:
-
-- Code structure.
-
-- Commands to reproduce your experiments.
-
-- Write-up of your findings and conclusions.
-
-- Ipython notebooks can be organized in `notebooks`.
 
 ## PointRCNN: 3D Object Proposal Generation and Detection from Point Cloud
 
