@@ -95,7 +95,7 @@ python eval_rcnn.py --cfg_file cfgs/default.yaml --ckpt PointRCNN.pth --batch_si
 
 ### Results
 
-I measure the average precision of object detection on the car category of the KITTI dataset. I measure the avverage precision of achieving a minimum IOU of 0.7 on easy, medium, and hard difficulty samples.
+I measure the average precision of object detection on the car category of the KITTI dataset. I measure the avverage precision of achieving a minimum IOU of 0.7 on easy, medium, and hard difficulty samples. Precision is the number of true positives divided by the sum of true positives and false positives.
 I measure bbox (the 2D accuracy of the detection frame), bev (the accuracy of the detection box in view), 3d (the accuracy of the detection frame), and aos (the accuracy of the detection target rotation angle).
 
 |      | Easy | Medium | Hard  |
@@ -104,6 +104,15 @@ I measure bbox (the 2D accuracy of the detection frame), bev (the accuracy of th
 | bev  | 90.2 | 87.9   | 85.5  |
 | 3d   | 89.2 | 78.9   | 77.9  |
 | aos  | 96.9 | 89.4   | 88.6  |
+
+I also measure the total bounding box recall and the total region of interest bounding box recall. Recall is the number of true positives divided by the sum of true positives and false negatives. I measure recall accross mutliple IOU thresholds (0.1, 0.3, 0.5, 0.7, 0.9).
+
+|                 | 0.1   | 0.3   | 0.5   | 0.7   | 0.9   |
+|-----------------|-------|-------|-------|-------|-------|
+| bbox recall     | 0.95  | 0.94  | 0.93  | 0.70  | 0.00  |
+| roi bbox recall | 0.95  | 0.94  | 0.93  | 0.83  | 0.16  |
+
+
 
 
 ## Reference
