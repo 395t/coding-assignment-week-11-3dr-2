@@ -45,6 +45,15 @@ sudo update-alternatives --set c++ /usr/bin/g++
 pip install torch==1.0.0 torchvision==0.2.1
 ```
 
+I installed easydict, tqdm, tensorboardX, and ninja:
+
+```shell
+pip install easydict
+pip install tqdm
+pip install tensorboardX
+pip install ninja
+```
+
 ### Results
 
 ## Reference
