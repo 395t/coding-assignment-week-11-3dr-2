@@ -95,8 +95,8 @@ python eval_rcnn.py --cfg_file cfgs/default.yaml --ckpt PointRCNN.pth --batch_si
 
 ### Results
 
-We measure the average precision of object detection on the car category of the KITTI dataset. We measure the avverage precision of achieving a minimum IOU of 0.7 on easy, medium, and hard difficulty samples.
-We measure bbox (the 2D accuracy of the detection frame), bev (the accuracy of the detection box in view), 3d (the accuracy of the detection frame), and aos (the accuracy of the detection target rotation angle).
+I measure the average precision of object detection on the car category of the KITTI dataset. I measure the avverage precision of achieving a minimum IOU of 0.7 on easy, medium, and hard difficulty samples.
+I measure bbox (the 2D accuracy of the detection frame), bev (the accuracy of the detection box in view), 3d (the accuracy of the detection frame), and aos (the accuracy of the detection target rotation angle).
 
 |      | Easy | Medium | Hard  |
 |------|------|--------|-------|
