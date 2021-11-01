@@ -54,6 +54,29 @@ pip install tensorboardX
 pip install ninja
 ```
 
+I downloaded and organized the KITTI object detection dataset as indicated in the code repository:
+
+```shell
+PointRCNN
+├── data
+│   ├── KITTI
+│   │   ├── ImageSets
+│   │   ├── object
+│   │   │   ├──training
+│   │   │      ├──calib & velodyne & label_2 & image_2 & (optional: planes)
+│   │   │   ├──testing
+│   │   │      ├──calib & velodyne & image_2
+├── lib
+├── pointnet2_lib
+├── tools
+```
+```shell
+wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_velodyne.zip
+wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_calib.zip
+wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip
+wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip
+```
+
 ### Results
 
 ## Reference
