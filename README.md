@@ -212,3 +212,113 @@ In this project, we are facing the following difficulties during implementation:
 
 - Dataset size: most of the 3D object detection datasets is relatively large and we cannot apply whole set of them during testing due to the drive space. Accordingly, we only use the train/eval set in the first data split of nuScenes due to the hardware limitation. Thus, the results might be different from what they reported in the paper.
 - Dependencies issue: we tried running the official code release here yet failed to solve the dependencies issue. The main reason is that we did not have enough clearance to change/update CUDA version in order to compile the library like `spconv` or other CUDA extensions.
+
+## PointPillars
+
+### Model and Dataset
+
+I used the PointPillars model to perform object detection on the KITTI dataset.
+The model was obtained from https://github.com/nutonomy/second.pytorch,
+the code the authors used in the paper. The KITTI object detection benchmark
+dataset, which is composed of 7481 training and 7518 testing samples, was
+prepocessed and prepared using the provided code as well. The authors of the
+paper further split this dataset so that the car detections were seperate
+from the pedestrian/cyclist detections.
+
+### Code
+
+The code was prepared by following the available instructions on the github.
+After cloning the repository packages were intalled as follows:
+```bash
+conda create -n pointpillars python=3.7 anaconda
+source activate pointpillars
+conda install shapely pybind11 protobuf scikit-image numba pillow
+conda install pytorch torchvision -c pytorch
+conda install google-sparsehash -c bioconda
+pip install --upgrade pip
+pip install fire tensorboardX
+git clone git@github.com:facebookresearch/SparseConvNet.git
+cd SparseConvNet/
+bash build.sh
+sudo apt-get install libboost-all-dev
+export NUMBAPRO_CUDA_DRIVER=/usr/lib/x86_64-linux-gnu/libcuda.so
+export NUMBAPRO_NVVM=/usr/local/cuda/nvvm/lib64/libnvvm.so
+export NUMBAPRO_LIBDEVICE=/usr/local/cuda/nvvm/libdevice
+```
+The python path was also updated to include the the directory
+second.pytorch/. The KITTI dataset was downloaded from
+http://www.cvlibs.net/datasets/kitti/eval_object.php?obj_benchmark=3d
+and was set up into the following structure:
+
+```plain
+└── KITTI_DATASET_ROOT
+       ├── training    <-- 7481 train data
+       |   ├── image_2 <-- for visualization
+       |   ├── calib
+       |   ├── label_2
+       |   ├── velodyne
+       |   └── velodyne_reduced <-- empty directory
+       └── testing     <-- 7580 test data
+           ├── image_2 <-- for visualization
+           ├── calib
+           ├── velodyne
+           └── velodyne_reduced <-- empty directory
+```
+
+The data was then processed with
+
+```bash
+python create_data.py create_kitti_info_file --data_path=KITTI_DATASET_ROOT
+python create_data.py create_reduced_point_cloud --data_path=KITTI_DATASET_ROOT
+python create_data.py create_groundtruth_database --data_path=KITTI_DATASET_ROOT
+```
+And finally the configuration files were modified so that
+
+```bash
+train_input_reader: {
+  ...
+  database_sampler {
+    database_info_path: "/path/to/kitti_dbinfos_train.pkl"
+    ...
+  }
+  kitti_info_path: "/path/to/kitti_infos_train.pkl"
+  kitti_root_path: "KITTI_DATASET_ROOT"
+}
+...
+eval_input_reader: {
+  ...
+  kitti_info_path: "/path/to/kitti_infos_val.pkl"
+  kitti_root_path: "KITTI_DATASET_ROOT"
+}
+```
+### Experiments
+
+All experiments were run on gcloud VM. An n1-standard-2 machine was used
+with a NVIDIA Tesla P4 GPU and a "Deep Learning Image: PyTorch 1.8 m73 CUDA 110"
+image. The PointPillars model was trained for 10 epochs on the Cars and
+Pedestrian detection tasks with pillar grid sizes of 16, 20, 24, and 28 $$m^2$$
+
+### Results
+
+The MAP from the Car section of the KITTI dataset is shown below.
+
+![car_map](pointpillars/car_map.png)
+
+The light orange has a bin size of 16, the dark blue a bin size of 20, the
+red a bin size of 24, and the light blue a bin size of 24. The MAP of the
+Pedestrians can be seen below
+
+![ped_map](pointpillars/ped_map.png)
+
+The pink has a bin size of 16, the dark green a bin size of 20, the
+gray a bin size of 24, and the orange a bin size of 24. The rest of
+the metrics for these experiments can be viewed on the notebook
+in the pointpillars/ directory.
+
+### Analysis
+
+It appears, as mentioned in the paper, that the smaller bin sizes tended to
+outperform the larger bin sizes. However, this increased MAP came at a
+price of longer training times, as we can observe that the bin size of
+16 for the car dataset took almost 30 minutes longer to complete training
+than the bin size of 24.
