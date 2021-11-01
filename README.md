@@ -16,6 +16,11 @@ The summary can contain but is not limited to:
 
 ### Model and Dataset
 
+The PointRCNN object detector directly generates 3D bounding box proposals from raw point cloud data.
+I used the code referenced in the paper: https://github.com/sshaoshuai/PointRCNN
+
+As in the paper, I evaluated the PointRCNN model on the 3D object detection benchmark of KITTI. The 3D object detection benchmark contains 7481 training samples and 7518 testing samples. The paper divides the training samples into the train split (3712 samples) and the val split (3769 samples).
+
 ### Code
 
 ### Results
