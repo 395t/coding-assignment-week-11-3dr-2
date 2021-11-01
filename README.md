@@ -106,7 +106,7 @@ According to the per-class results, the best three categories are *car*, *pedest
 
 
 
-![5](5.png)
+![center_point_vis](center_point_vis.png)
 
 
 
