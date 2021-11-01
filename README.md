@@ -23,7 +23,7 @@ As in the paper, I evaluated the PointRCNN model on the 3D object detection benc
 
 ### Code
 
-First, I cloned the code repository mentioned in the paper.:
+First, I cloned the code repository mentioned in the paper:
 
 ```shell
 git clone --recursive https://github.com/sshaoshuai/PointRCNN.git
@@ -81,6 +81,16 @@ wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_velodyne.zip
 wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_calib.zip
 wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_label_2.zip
 wget https://s3.eu-central-1.amazonaws.com/avg-kitti/data_object_image_2.zip
+```
+
+I downloaded the PointRCNN object detector model:
+```shell
+wget https://drive.google.com/file/d/1aapMXBkSn5c5hNTDdRNI74Ptxfny7PuC/view?usp=sharing
+```
+
+Finally, I evaluated the model on the car category of the KITTI object detection dataset:
+```shell
+python eval_rcnn.py --cfg_file cfgs/default.yaml --ckpt PointRCNN.pth --batch_size 1 --eval_mode rcnn --set RPN.LOC_XZ_FINE False
 ```
 
 ### Results
