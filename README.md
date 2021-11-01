@@ -23,6 +23,28 @@ As in the paper, I evaluated the PointRCNN model on the 3D object detection benc
 
 ### Code
 
+First, I cloned the code repository mentioned in the paper.:
+
+```shell
+git clone --recursive https://github.com/sshaoshuai/PointRCNN.git
+```
+
+I changed the gcc version to 5.0, the torch version to 1.0.0, and the torchvision version to 0.2.1:
+
+```shell
+sudo apt install g++-5
+sudo apt install gcc-5
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 10
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 20
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 10
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-5 20
+sudo update-alternatives --install /usr/bin/cc cc /usr/bin/gcc 30
+sudo update-alternatives --set cc /usr/bin/gcc
+sudo update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30
+sudo update-alternatives --set c++ /usr/bin/g++
+pip install torch==1.0.0 torchvision==0.2.1
+```
+
 ### Results
 
 ## Reference
