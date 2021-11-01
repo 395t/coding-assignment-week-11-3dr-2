@@ -54,6 +54,12 @@ pip install tensorboardX
 pip install ninja
 ```
 
+I built and installed the pointnet2_lib, iou3d, roipool3d libraries:
+
+```shell
+sh build_and_install.sh
+```
+
 I downloaded and organized the KITTI object detection dataset as indicated in the code repository:
 
 ```shell
